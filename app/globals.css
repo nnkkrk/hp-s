@@ -1,0 +1,506 @@
+@import "tailwindcss";
+
+/* 🌍 Base Theme (Default Light) */
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --accent: #3b82f6;
+  /* Bright sky blue (default accent) */
+  --accent-hover: #2563eb;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --card: #f1f5f9;
+}
+
+/* 🧩 Tailwind variable mapping */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+}
+
+/* 🌙 Dark Mode */
+html[data-theme="dark"] {
+  --background: #050505;
+  --foreground: #f1f5f9;
+  --accent: #7dd3fc;
+  /* Electric cyan */
+  --accent-hover: #38bdf8;
+  --muted: #94a3b8;
+  --border: #1e293b;
+  --card: #0f172a;
+}
+
+/* 💠 Cyber Theme (Futuristic / Tech Anime) */
+html[data-theme="cyber"] {
+  --background: #030712;
+  --foreground: #e0f2fe;
+  --accent: #00ffff;
+  /* Neon cyan glow */
+  --accent-hover: #06b6d4;
+  --muted: #94a3b8;
+  --border: #0f172a;
+  --card: #111827;
+}
+
+/* 🌸 Sakura Theme (Romantic / Soft Anime) */
+html[data-theme="sakura"] {
+  --background: #fff5f8;
+  --foreground: #1f2937;
+  --accent: #ff4d94;
+  /* Hot pink */
+  --accent-hover: #e11d74;
+  --muted: #6b7280;
+  --border: #fbcfe8;
+  --card: #ffe4ef;
+}
+
+/* 💜 Violet Theme (Mystic / Shonen Anime) */
+html[data-theme="violet"] {
+  --background: #0b0b14;
+  --foreground: #e2e8f0;
+  --accent: #a855f7;
+  /* Soft violet */
+  --accent-hover: #9333ea;
+  --muted: #a1a1aa;
+  --border: #2e1065;
+  --card: #1e1b4b;
+}
+
+/* 🔥 Ember Theme (Energetic / Action Anime) */
+html[data-theme="ember"] {
+  --background: #0f0f0f;
+  --foreground: #fefce8;
+  --accent: #f59e0b;
+  /* Golden amber */
+  --accent-hover: #f97316;
+  --muted: #fcd34d;
+  --border: #78350f;
+  --card: #1c1917;
+}
+
+/* 🌪️ Midnight Purple (Epic Anime Mood) */
+html[data-theme="midnight"] {
+  --background: #080010;
+  --foreground: #e5e7eb;
+  --accent: #8b5cf6;
+  /* Deep purple */
+  --accent-hover: #7c3aed;
+  --muted: #a78bfa;
+  --border: #2d1b69;
+  --card: #100026;
+}
+
+/* 🌊 Ocean Theme (Calm / Slice-of-Life Anime) */
+html[data-theme="ocean"] {
+  --background: #f0f9ff;
+  --foreground: #0c4a6e;
+  --accent: #0ea5e9;
+  /* Sky blue */
+  --accent-hover: #0284c7;
+  --muted: #64748b;
+  --border: #bae6fd;
+  --card: #e0f2fe;
+}
+
+/* 🍃 Forest Theme (Nature / Isekai Anime) */
+html[data-theme="forest"] {
+  --background: #f0fdf4;
+  --foreground: #14532d;
+  --accent: #22c55e;
+  /* Emerald green */
+  --accent-hover: #16a34a;
+  --muted: #6b7280;
+  --border: #bbf7d0;
+  --card: #dcfce7;
+}
+
+/* 🩸 Crimson Theme (Dark / Seinen Anime) */
+html[data-theme="crimson"] {
+  --background: #0a0000;
+  --foreground: #fecaca;
+  --accent: #dc2626;
+  /* Blood red */
+  --accent-hover: #991b1b;
+  --muted: #9ca3af;
+  --border: #450a0a;
+  --card: #1a0000;
+}
+
+/* 🌌 Galaxy Theme (Space / Mecha Anime) */
+html[data-theme="galaxy"] {
+  --background: #020617;
+  --foreground: #cbd5e1;
+  --accent: #6366f1;
+  /* Indigo */
+  --accent-hover: #4f46e5;
+  --muted: #818cf8;
+  --border: #1e293b;
+  --card: #0f172a;
+}
+
+/* 🌅 Sunset Theme (Romance / Drama Anime) */
+html[data-theme="sunset"] {
+  --background: #fef3c7;
+  --foreground: #78350f;
+  --accent: #f97316;
+  /* Warm orange */
+  --accent-hover: #ea580c;
+  --muted: #92400e;
+  --border: #fed7aa;
+  --card: #ffedd5;
+}
+
+/* ❄️ Ice Theme (Winter / Mystery Anime) */
+html[data-theme="ice"] {
+  --background: #ecfeff;
+  --foreground: #083344;
+  --accent: #06b6d4;
+  /* Cyan */
+  --accent-hover: #0891b2;
+  --muted: #475569;
+  --border: #a5f3fc;
+  --card: #cffafe;
+}
+
+/* 🎭 Monochrome Theme (Psychological / Art Anime) */
+html[data-theme="monochrome"] {
+  --background: #fafafa;
+  --foreground: #171717;
+  --accent: #404040;
+  /* Charcoal */
+  --accent-hover: #262626;
+  --muted: #737373;
+  --border: #d4d4d4;
+  --card: #f5f5f5;
+}
+
+/* 🌺 Tropical Theme (Summer / Beach Anime) */
+html[data-theme="tropical"] {
+  --background: #fffbeb;
+  --foreground: #134e4a;
+  --accent: #14b8a6;
+  /* Teal */
+  --accent-hover: #0d9488;
+  --muted: #6b7280;
+  --border: #99f6e4;
+  --card: #ccfbf1;
+}
+
+/* 👾 Retro Theme (8-bit / Gaming Anime) */
+html[data-theme="retro"] {
+  --background: #1a1a2e;
+  --foreground: #eee;
+  --accent: #ff006e;
+  /* Hot magenta */
+  --accent-hover: #d90368;
+  --muted: #a8dadc;
+  --border: #16213e;
+  --card: #0f3460;
+}
+
+/* 🪄 Smooth Transitions */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Poppins", system-ui, sans-serif;
+  transition: background 0.4s ease, color 0.4s ease, border 0.3s ease;
+}
+
+/* ✨ Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* 🧱 Utility */
+.border-theme {
+  border-color: var(--border);
+}
+
+.card {
+  background-color: var(--card);
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+/* 💫 Glow Effect */
+.glow {
+  text-shadow: 0 0 10px var(--accent);
+}
+
+/* button:hover {
+  box-shadow: 0 0 15px var(--accent);
+} */
+
+/* 🌙 Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+
+
+
+
+
+
+
+/* Random shaking / popping / wiggle animations */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.15);
+  }
+
+  60% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Animation controller */
+.animated-letter {
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  display: inline-block;
+}
+
+/* Each letter animates differently */
+.animated-letter:nth-child(1) {
+  animation-name: shake, pop;
+  animation-delay: 0.3s;
+}
+
+.animated-letter:nth-child(2) {
+  animation-name: floatUp, shake;
+  animation-delay: 1s;
+}
+
+/* FALL ANIMATION */
+@keyframes fallDown {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  40% {
+    transform: translateY(120px) rotate(25deg);
+  }
+
+  60% {
+    transform: translateY(180px) rotate(-10deg);
+  }
+
+  80% {
+    transform: translateY(210px) rotate(5deg);
+  }
+
+  100% {
+    transform: translateY(230px) rotate(0deg);
+  }
+}
+
+/* When clicked */
+.falling-b.fall {
+  animation: fallDown 1s ease-in forwards;
+  cursor: default;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 🧱 Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* ✨ Premium Animations */
+@keyframes rotate-gradient {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.5;
+  }
+
+  90% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-rotate-gradient {
+  animation: rotate-gradient 3s linear infinite;
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-float-particle {
+  animation: float linear infinite;
+}
+
+/* 🌀 Premium Loader Keyframes */
+@keyframes orbit-1 {
+  from {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+
+  to {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+@keyframes orbit-2 {
+  from {
+    transform: rotateX(0deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateX(-360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbit-3 {
+  from {
+    transform: rotateY(0deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateY(360deg) rotateZ(-360deg);
+  }
+}
+
+.animate-orbit-1 {
+  animation: orbit-1 0.6s linear infinite;
+}
+
+.animate-orbit-2 {
+  animation: orbit-2 0.8s linear infinite;
+}
+
+.animate-orbit-3 {
+  animation: orbit-3 1s linear infinite;
+}

@@ -1,0 +1,70 @@
+{
+  "posts": [
+    {
+      "title": "Strongest Early Game Heroes Ranked",
+      "image": "",
+      "url": "/blogs/strongest-early-game-heroes",
+      "tag": "Hero Guides",
+      "date": "2025-01-05",
+      "views": 5
+    },
+    {
+      "title": "Meta Tanks You Must Master",
+      "image": "",
+      "url": "/blogs/meta-tanks-guide",
+      "tag": "Builds",
+      "date": "2025-01-03",
+      "views": 3
+    },
+    {
+      "title": "Best 2025 Emblem Setups",
+      "image": "",
+      "url": "/blogs/best-emblem-2025",
+      "tag": "MLBB Tips",
+      "date": "2025-01-01",
+      "views": 10
+    },
+    {
+      "title": "Top 10 Assassin Heroes to Rank Up Fast",
+      "image": "",
+      "url": "/blogs/top-10-assassins",
+      "tag": "Hero Guides",
+      "date": "2025-01-08",
+      "desc": "A complete breakdown of the strongest assassins in the current meta.",
+      "views": 0
+    },
+    {
+      "title": "Best Mage Builds for 2025 Season",
+      "image": "",
+      "url": "/blogs/best-mage-builds-2025",
+      "tag": "Builds",
+      "date": "2025-01-12",
+      "views": 0
+    },
+    {
+      "title": "How to Counter OP Marksmen in Late Game",
+      "image": "",
+      "url": "/blogs/counter-marksmen",
+      "tag": "MLBB Tips",
+      "date": "2025-01-10",
+      "views": 0
+    },
+    {
+      "title": "MLBB Esports 2025 Roadmap Breakdown",
+      "image": "",
+      "url": "/blogs/esports-roadmap-2025",
+      "tag": "Esports",
+      "date": "2025-01-09",
+      "views": 0
+    }
+  ],
+
+  "categories": [
+    { "name": "Hero Guides", "icon": "📘" },
+    { "name": "Builds", "icon": "⚔️" },
+    { "name": "Esports", "icon": "🔥" },
+    { "name": "MLBB Tips", "icon": "🎯" },
+    { "name": "Tier Lists", "icon": "🏆" },
+    { "name": "Updates", "icon": "📝" }
+  ]
+}
