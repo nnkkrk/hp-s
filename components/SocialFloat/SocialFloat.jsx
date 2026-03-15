@@ -22,7 +22,7 @@ const socialLinks = [
   {
     name: "Instagram",
     icon: FaInstagram,
-    url: "https://www.instagram.com/tronics_offficial",
+    url: "https://www.instagram.com/happy_offficial",
     color: "hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:text-white",
     bgGradient: "from-purple-500 to-pink-500",
   },

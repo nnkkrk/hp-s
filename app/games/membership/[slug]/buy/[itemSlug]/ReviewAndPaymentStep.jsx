@@ -31,7 +31,7 @@ export default function ReviewAndPaymentStep({
   const handleUPI = async () => {
     setPaymentMethod("upi");
     const upiId = "mewji@upi";
-    const upiString = `upi://pay?pa=${upiId}&pn=Tronics Store&am=${totalPrice}&cu=INR`;
+    const upiString = `upi://pay?pa=${upiId}&pn=Happy Store&am=${totalPrice}&cu=INR`;
     const qr = await QRCode.toDataURL(upiString);
     setUpiQR(qr);
   };

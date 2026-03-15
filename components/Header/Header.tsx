@@ -138,10 +138,10 @@ export default function Header() {
               <Image
                 src={logo}
                 alt="Logo"
-                width={95}
-                height={28}
+                width={32}
+                height={10}
                 priority
-                className="object-contain -ml-3"
+                className="object-contain ml-2"
               />
             </motion.div>
             <div className="absolute -inset-2 bg-[var(--accent)]/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur-md" />

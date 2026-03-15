@@ -27,7 +27,7 @@ const WHATSAPP_URL = process.env.NEXT_PUBLIC_WHATSAPP_URL;
 
 const MADE_BY_NAME = "TK";
 const MADE_BY_URL = "https://wa.me/9178521537";
-const COPYRIGHT_NAME = "TRONICS STORE";
+const COPYRIGHT_NAME = "HAPPY STORE";
 
 const FOOTER_LINKS = [
   {

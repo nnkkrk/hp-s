@@ -16,15 +16,15 @@ const storyData = [
     isLive: true,
     label: "LIVE"
   },
-  {
-    id: 3,
-    title: "PUBG Mobile",
-    image: "/game-assets/bgmi-logo.webp",
-    link: "/games/pubg-mobile138",
-    color: "from-orange-400 via-red-500 to-rose-600",
-    isLive: true,
-    label: "TOP"
-  },
+  // {
+  //   id: 3,
+  //   title: "PUBG Mobile",
+  //   image: "/game-assets/bgmi-logo.webp",
+  //   link: "/games/pubg-mobile138",
+  //   color: "from-orange-400 via-red-500 to-rose-600",
+  //   isLive: true,
+  //   label: "TOP"
+  // },
   {
     id: 4,
     title: " Bundles",
@@ -34,15 +34,15 @@ const storyData = [
     isLive: false,
     label: "HOT"
   },
-  {
-    id: 5,
-    title: "VIP",
-    image: "/membership/silver-m.png",
-    link: "/games/membership/silver-membership",
-    color: "from-emerald-400 via-teal-500 to-green-600",
-    isLive: false,
-    label: "BEST"
-  },
+  // {
+  //   id: 5,
+  //   title: "VIP",
+  //   image: "/membership/silver-m.png",
+  //   link: "/games/membership/silver-membership",
+  //   color: "from-emerald-400 via-teal-500 to-green-600",
+  //   isLive: false,
+  //   label: "BEST"
+  // },
 ];
 
 export default function StorySlider() {

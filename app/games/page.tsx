@@ -29,7 +29,7 @@ export default function GamesPage() {
     "Honor Of Kings",
     "TEST 1",
     "Wuthering of Waves",
-    "Where Winds Meet"
+
   ];
 
   const isOutOfStock = (name: string) =>

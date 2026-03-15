@@ -145,7 +145,13 @@ export async function GET() {
       "mobile-legends-backup826",
       "wuthering-of-waves464",
       "value-pass-ml948",
-      "ph-value-pass588"
+      "ph-value-pass588",
+      "where-winds-meet280",
+      "pubg-mobile138",
+      "magic-chess-gogo-india924",
+      "mlbb-indo42",
+      "mlbb-russia953",
+      "sgmy-mlbb893"
     ];
 
     const filteredGames =
@@ -220,17 +226,17 @@ export async function GET() {
         regionalGames,
 
         // 🔥 OTT SECTION
-        otts: {
-          title: "OTT & Social Subscriptions",
-          items: OTTS.filter((o) => o.available),
-          total: OTTS.filter((o) => o.available).length,
-        },
+        // otts: {
+        //   title: "OTT & Social Subscriptions",
+        //   items: OTTS.filter((o) => o.available),
+        //   total: OTTS.filter((o) => o.available).length,
+        // },
         // 🔥 MEMBERSHIP SECTION
-        memberships: {
-          title: "Memberships & Passes",
-          items: MEMBERSHIPS.filter((m) => m.available),
-          total: MEMBERSHIPS.filter((m) => m.available).length,
-        },
+        // memberships: {
+        //   title: "Memberships & Passes",
+        //   items: MEMBERSHIPS.filter((m) => m.available),
+        //   total: MEMBERSHIPS.filter((m) => m.available).length,
+        // },
 
       },
     });

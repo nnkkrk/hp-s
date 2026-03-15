@@ -12,7 +12,7 @@ import { FiSend, FiMessageSquare } from "react-icons/fi";
 const KB = [
     {
         keys: ["hi", "hello", "hey", "hii", "helo", "sup", "yo"],
-        reply: "Hey there! 👋 Welcome to **Tronics Store**!\n\nI'm your 24/7 support bot. How can I help you today?",
+        reply: "Hey there! 👋 Welcome to **Happy Store**!\n\nI'm your 24/7 support bot. How can I help you today?",
         chips: ["How to top up?", "Payment methods", "Delivery time", "Refund policy"],
     },
     {
@@ -104,7 +104,7 @@ const FALLBACK = {
 
 const WELCOME = {
     role: "bot",
-    text: "Hi! 👋 I'm **Tronics Bot**, your 24/7 support assistant!\n\nI can help with top-ups, payments, delivery, refunds, and more. What do you need?",
+    text: "Hi! 👋 I'm **Happy Bot**, your 24/7 support assistant!\n\nI can help with top-ups, payments, delivery, refunds, and more. What do you need?",
     chips: ["How to top up?", "Payment methods", "Delivery time", "Refund policy"],
     time: new Date(),
 };
@@ -310,7 +310,7 @@ export default function ChatBot() {
                                 }} />
                             </div>
                             <div style={{ flex: 1 }}>
-                                <p style={{ fontSize: 13, fontWeight: 800, color: "rgba(255,255,255,0.92)", margin: 0 }}>Tronics Bot</p>
+                                <p style={{ fontSize: 13, fontWeight: 800, color: "rgba(255,255,255,0.92)", margin: 0 }}>Happy Bot</p>
                                 <p style={{ fontSize: 9, color: "#4ade80", margin: 0, fontWeight: 600, letterSpacing: "0.04em" }}>● Online · Replies instantly</p>
                             </div>
                             <motion.button
