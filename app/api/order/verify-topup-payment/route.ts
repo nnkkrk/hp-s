@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     const authHeader = req.headers.get("authorization");
 
     if (!authHeader?.startsWith("Bearer ")) {
+      console.warn("Topup verify failed: Missing or invalid Authorization header");
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 401 }
@@ -26,7 +27,8 @@ export async function POST(req: Request) {
         authHeader.split(" ")[1],
         process.env.JWT_SECRET!
       );
-    } catch {
+    } catch (err: any) {
+      console.error("Topup verify failed: JWT verification error", err.message);
       return NextResponse.json(
         { success: false, message: "Invalid token" },
         { status: 401 }
@@ -41,6 +43,7 @@ export async function POST(req: Request) {
     const { orderId } = await req.json();
 
     if (!orderId || typeof orderId !== "string") {
+      console.warn("Topup verify failed: Invalid or missing orderId", { orderId });
       return NextResponse.json({
         success: false,
         message: "Invalid or missing orderId",
@@ -53,6 +56,7 @@ export async function POST(req: Request) {
     const order = await Order.findOne({ orderId });
 
     if (!order) {
+      console.warn(`Topup verify failed: Order ${orderId} not found in database`);
       return NextResponse.json({
         success: false,
         message: "Order not found",
@@ -63,6 +67,7 @@ export async function POST(req: Request) {
        🔒 OWNERSHIP CHECK (CRITICAL)
     ===================================================== */
     if (order.userId && order.userId !== tokenUserId) {
+      console.error(`Topup verify failed: Ownership mismatch for order ${orderId}. TokenUser: ${tokenUserId}, OrderUser: ${order.userId}`);
       return NextResponse.json(
         { success: false, message: "Forbidden" },
         { status: 403 }
@@ -85,9 +90,9 @@ export async function POST(req: Request) {
 
     // If order is more than 90 seconds old and still not marked success...
     if (timeSinceCreation > 90 * 1000 && order.status === "pending") {
+      console.warn(`Topup verify: Order ${orderId} timed out (90s). Time since creation: ${Math.round(timeSinceCreation / 1000)}s`);
       order.status = "failed";
-      // We don't mark paymentStatus as failed yet because they might have paid
-      // but the topup failed to trigger within the window.
+      // ...
       if (order.topupStatus === "pending") {
         order.topupStatus = "failed";
       }
@@ -101,6 +106,7 @@ export async function POST(req: Request) {
 
     // Traditional expiry check (safety fallback)
     if (order.expiresAt && Date.now() > order.expiresAt.getTime()) {
+      console.warn(`Topup verify: Order ${orderId} expired at ${order.expiresAt}`);
       order.status = "failed";
       order.paymentStatus = "failed";
       await order.save();
@@ -128,7 +134,7 @@ export async function POST(req: Request) {
       formData.append("order_id", orderId);
 
       const resp = await fetch(
-        "https://xyzpay.site/api/check-order-status",
+        "https://chuimei-pe.in/api/check-order-status",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -136,7 +142,14 @@ export async function POST(req: Request) {
         }
       );
 
+      if (!resp.ok) {
+        const errorText = await resp.text();
+        console.error(`Topup verify: Gateway status check failed for ${orderId}. Status: ${resp.status}, Body: ${errorText}`);
+        return NextResponse.json({ success: false, message: "Payment gateway communication error" }, { status: 502 });
+      }
+
       const data = await resp.json();
+      console.log(`Topup verify: Gateway response for ${orderId}:`, data);
       const txnStatus = data?.result?.txnStatus;
 
       /* =====================================================
@@ -150,6 +163,7 @@ export async function POST(req: Request) {
       }
 
       if (txnStatus !== "SUCCESS" && txnStatus !== "COMPLETED") {
+        console.warn(`Topup verify: Payment not successful for ${orderId}. Status: ${txnStatus}`);
         order.status = "failed";
         order.paymentStatus = "failed";
         order.gatewayResponse = data;
@@ -171,6 +185,7 @@ export async function POST(req: Request) {
       );
 
       if (!paidAmount || paidAmount !== Number(order.price)) {
+        console.error(`Topup verify: PRICE MISMATCH for ${orderId}. Paid: ${paidAmount}, Expected: ${order.price}`);
         order.status = "fraud";
         order.paymentStatus = "failed";
         order.topupStatus = "failed";
@@ -199,8 +214,14 @@ export async function POST(req: Request) {
       });
     }
 
+    console.info(`Topup verify: Initiating topup request for ${orderId}`, {
+      gameSlug: order.gameSlug,
+      itemSlug: order.itemSlug,
+      playerId: order.playerId
+    });
+
     const gameResp = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`,
+      `${process.env.NEXT_PUBLIC_API_BASE}/api/service/order`,
       {
         method: "POST",
         headers: {
@@ -208,24 +229,23 @@ export async function POST(req: Request) {
           "x-api-key": process.env.API_SECRET_KEY!,
         },
         body: JSON.stringify({
+          gameSlug: order.gameSlug,
+          itemSlug: order.itemSlug,
           playerId: String(order.playerId),
-          zoneId: String(order.zoneId),
-          productId: `${order.gameSlug}_${order.itemSlug}`,
-          currency: "USD",
+          zoneId: order.zoneId ? String(order.zoneId) : undefined,
         }),
       }
     );
 
     const gameData = await gameResp.json();
+    console.log(`Topup verify: Topup response for ${orderId}:`, gameData);
     order.externalResponse = gameData;
 
     const topupSuccess =
-      gameResp.ok &&
-      (gameData?.success === true ||
-        gameData?.status === true ||
-        gameData?.result?.status === "SUCCESS");
+      gameResp.ok && (gameData?.success === true || gameData?.order?.topupStatus === "success");
 
     if (topupSuccess) {
+      console.info(`Topup verify: Topup success for ${orderId}`);
       order.status = "success";
       order.topupStatus = "success";
       await order.save();
@@ -236,6 +256,7 @@ export async function POST(req: Request) {
         // send mail if needed
       } catch { }
     } else {
+      console.error(`Topup verify: Topup failed for ${orderId}. Status: ${gameResp.status}`);
       order.status = "failed";
       order.topupStatus = "failed";
       await order.save();
@@ -244,9 +265,8 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: order.status === "success",
       message:
-        order.status === "success"
-          ? "Topup successful"
-          : "Topup failed",
+        gameData?.message ||
+        (order.status === "success" ? "Topup successful" : "Topup failed"),
       topupResponse: gameData,
     });
   } catch (error: any) {

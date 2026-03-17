@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import { FEATURE_FLAGS } from "@/lib/config";
 
 export async function GET(req) {
   try {
@@ -41,7 +42,7 @@ export async function GET(req) {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        wallet: user.wallet,
+        ...(FEATURE_FLAGS.ENABLE_WALLET ? { wallet: user.wallet } : {}),
         order: user.order,
         userType: user.userType,
         avatar: user.avatar,

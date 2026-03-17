@@ -36,7 +36,7 @@ export async function processTopup(orderId: string) {
 
         // Call external game API
         const gameResp = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE}/api-service/order`,
+            `${process.env.NEXT_PUBLIC_API_BASE}/api/service/order`,
             {
                 method: "POST",
                 headers: {
@@ -44,10 +44,10 @@ export async function processTopup(orderId: string) {
                     "x-api-key": process.env.API_SECRET_KEY!,
                 },
                 body: JSON.stringify({
+                    gameSlug: order.gameSlug,
+                    itemSlug: order.itemSlug,
                     playerId: String(order.playerId),
-                    zoneId: String(order.zoneId),
-                    productId: `${order.gameSlug}_${order.itemSlug}`,
-                    currency: "USD",
+                    zoneId: order.zoneId ? String(order.zoneId) : undefined,
                 }),
             }
         );
@@ -56,10 +56,7 @@ export async function processTopup(orderId: string) {
         order.externalResponse = gameData;
 
         const topupSuccess =
-            gameResp.ok &&
-            (gameData?.success === true ||
-                gameData?.status === true ||
-                gameData?.result?.status === "SUCCESS");
+            gameResp.ok && (gameData?.success === true || gameData?.order?.topupStatus === "success");
 
         if (topupSuccess) {
             order.status = "success";
@@ -76,7 +73,7 @@ export async function processTopup(orderId: string) {
 
             return {
                 success: true,
-                message: "Topup successful",
+                message: gameData?.message || "Topup successful",
                 topupResponse: gameData
             };
         } else {
@@ -86,7 +83,7 @@ export async function processTopup(orderId: string) {
 
             return {
                 success: false,
-                message: "Topup failed",
+                message: gameData?.message || "Topup failed",
                 topupResponse: gameData
             };
         }

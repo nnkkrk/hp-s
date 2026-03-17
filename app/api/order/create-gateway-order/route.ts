@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
 import PricingConfig from "@/models/PricingConfig";
 import crypto from "crypto";
+import { FEATURE_FLAGS } from "@/lib/config";
 
 /* =====================================================
    TYPES
@@ -218,11 +219,11 @@ export async function POST(req: Request) {
       expiresAt,
     });
 
-    /* ---------- WALLET PAYMENT LOGIC (DISABLED) ---------- */
+    /* ---------- WALLET PAYMENT LOGIC ---------- */
     if (paymentMethod === "wallet") {
-      return NextResponse.json({ success: false, message: "Wallet system is currently not available." });
-
-      /* 
+      if (!FEATURE_FLAGS.ENABLE_WALLET) {
+        return NextResponse.json({ success: false, message: "Wallet payments are currently disabled" });
+      }
       const User = (await import("@/models/User")).default;
       const WalletTransaction = (await import("@/models/WalletTransaction")).default;
 
@@ -267,7 +268,6 @@ export async function POST(req: Request) {
         message: "Payment successful via wallet. Processing topup...",
         paidViaWallet: true,
       });
-      */
     }
 
     /* ---------- PAYMENT GATEWAY ---------- */
@@ -281,7 +281,7 @@ export async function POST(req: Request) {
       `${process.env.NEXT_PUBLIC_BASE_URLU}/payment/topup-complete`
     );
 
-    const resp = await fetch("https://xyzpay.site/api/create-order", {
+    const resp = await fetch("https://chuimei-pe.in/api/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),

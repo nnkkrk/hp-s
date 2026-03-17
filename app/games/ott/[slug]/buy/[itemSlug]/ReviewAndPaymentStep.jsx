@@ -5,6 +5,7 @@ import Image from "next/image";
 import QRCode from "qrcode";
 import logo from "@/public/logo.png";
 import { FiActivity, FiShield, FiZap, FiCreditCard } from "react-icons/fi";
+import { FEATURE_FLAGS } from "@/lib/config";
 
 export default function ReviewAndPaymentStep({
   step,
@@ -154,34 +155,38 @@ export default function ReviewAndPaymentStep({
 
             <div className="space-y-4">
               {/* Wallet Button */}
-              <button
-                onClick={() => {
-                  if (walletBalance < totalPrice) return;
-                  setPaymentMethod("wallet");
-                }}
-                className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all duration-300 ${paymentMethod === "wallet"
-                  ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
-                  : "border-[var(--border)] bg-black/20 hover:border-[var(--accent)]/40 hover:bg-black/30"
-                  } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed" : ""}`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-gray-800 text-gray-400'
-                    }`}>
-                    <FiActivity size={20} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm">Pay via Wallet</p>
-                    <p className="text-[10px] text-[var(--muted)]">Balance: ₹{walletBalance.toFixed(2)}</p>
-                  </div>
-                </div>
-                {paymentMethod === 'wallet' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-black" /></div>}
-              </button>
+              {FEATURE_FLAGS.ENABLE_WALLET && (
+                <>
+                  <button
+                    onClick={() => {
+                      if (walletBalance < totalPrice) return;
+                      setPaymentMethod("wallet");
+                    }}
+                    className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all duration-300 ${paymentMethod === "wallet"
+                      ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
+                      : "border-[var(--border)] bg-black/20 hover:border-[var(--accent)]/40 hover:bg-black/30"
+                      } ${walletBalance < totalPrice ? "opacity-40 cursor-not-allowed" : ""}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${paymentMethod === 'wallet' ? 'bg-[var(--accent)] text-black' : 'bg-gray-800 text-gray-400'
+                        }`}>
+                        <FiActivity size={20} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm">Pay via Wallet</p>
+                        <p className="text-[10px] text-[var(--muted)]">Balance: ₹{walletBalance.toFixed(2)}</p>
+                      </div>
+                    </div>
+                    {paymentMethod === 'wallet' && <div className="h-5 w-5 rounded-full bg-[var(--accent)] flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-black" /></div>}
+                  </button>
 
-              {walletBalance < totalPrice && (
-                <p className="text-red-400 text-[10px] mt-2 flex items-center gap-1.5 px-2">
-                  <div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
-                  Insufficient balance. Top up your wallet to pay instantly.
-                </p>
+                  {walletBalance < totalPrice && (
+                    <p className="text-red-400 text-[10px] mt-2 flex items-center gap-1.5 px-2">
+                      <div className="w-1 h-1 rounded-full bg-red-400 animate-pulse" />
+                      Insufficient balance. Top up your wallet to pay instantly.
+                    </p>
+                  )}
+                </>
               )}
 
               {/* UPI Button */}

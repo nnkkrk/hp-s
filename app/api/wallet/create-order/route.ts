@@ -3,10 +3,15 @@ import { connectDB } from "@/lib/mongodb";
 import WalletTransaction from "@/models/WalletTransaction";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { FEATURE_FLAGS } from "@/lib/config";
 
 export async function POST(req: Request) {
   try {
     await connectDB();
+
+    if (!FEATURE_FLAGS.ENABLE_WALLET) {
+      return NextResponse.json({ success: false, message: "Wallet services are currently disabled" }, { status: 403 });
+    }
 
     /* ---------- AUTH (JWT) ---------- */
     const authHeader = req.headers.get("authorization");
@@ -31,9 +36,6 @@ export async function POST(req: Request) {
     }
 
     /* ---------- WALLET RECHARGE (DISABLED) ---------- */
-    return NextResponse.json({ success: false, message: "Wallet system is currently not available." });
-
-    /* 
     const userId = decoded.userId;
     const { amount, mobile } = await req.json();
 
@@ -65,7 +67,7 @@ export async function POST(req: Request) {
     formData.append("remark1", "wallet-topup");
     formData.append("remark2", userId);
 
-    const resp = await fetch("https://xyzpay.site/api/create-order", {
+    const resp = await fetch("https://chuimei-pe.in/api/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString(),
@@ -82,7 +84,6 @@ export async function POST(req: Request) {
       paymentUrl: data.result.payment_url,
       orderId: transactionId,
     });
-    */
   } catch (err: any) {
     console.error("Wallet recharge error:", err);
     return NextResponse.json({ success: false, message: "Server error" });

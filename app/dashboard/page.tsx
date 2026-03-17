@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AuthGuard from "../../components/AuthGuard";
+import { FEATURE_FLAGS } from "@/lib/config";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -48,14 +49,14 @@ export default function Dashboard() {
       route: "/dashboard/order",
       description: "Track your orders"
     },
-    {
+    ...(FEATURE_FLAGS.ENABLE_WALLET ? [{
       key: "wallet",
       label: "Wallet",
       value: `₹${walletBalance}`,
       icon: "💳",
       route: "/dashboard/wallet",
       description: "Manage your wallet"
-    },
+    }] : []),
     {
       key: "account",
       label: "Account",
@@ -85,19 +86,21 @@ export default function Dashboard() {
               Welcome back, {userDetails.name || "Player"} 👋
             </h1>
             <p className="text-sm text-[var(--muted)] mt-1">
-              Track orders, manage wallet & account
+              Track orders {FEATURE_FLAGS.ENABLE_WALLET && "& manage wallet"} & account
             </p>
           </div>
 
-          <div className="bg-[var(--accent)]/10 border border-[var(--accent)]/20 p-4 rounded-2xl flex items-center gap-4 shadow-sm backdrop-blur-sm">
-            <div className="h-10 w-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          {FEATURE_FLAGS.ENABLE_WALLET && (
+            <div className="bg-[var(--accent)]/10 border border-[var(--accent)]/20 p-4 rounded-2xl flex items-center gap-4 shadow-sm backdrop-blur-sm">
+              <div className="h-10 w-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-black shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">Wallet Balance</p>
+                <p className="text-xl font-black text-[var(--accent)]">₹{walletBalance.toFixed(2)}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">Wallet Balance</p>
-              <p className="text-xl font-black text-[var(--accent)]">₹{walletBalance.toFixed(2)}</p>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* DASHBOARD CARDS */}

@@ -7,6 +7,7 @@ import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/public/logo.png";
+import { FEATURE_FLAGS } from "@/lib/config";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -174,7 +175,7 @@ export default function Header() {
 
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-3 sm:gap-4" ref={dropdownRef}>
-          {user && (
+          {user && FEATURE_FLAGS.ENABLE_WALLET && (
             <Link
               href="/dashboard/wallet"
               className="flex items-center gap-1.5 bg-[var(--accent)]/10 border border-[var(--accent)]/30 px-2.5 py-1.5 rounded-full hover:bg-[var(--accent)]/20 transition-all group shrink-0 shadow-sm hover:shadow-md"
@@ -322,7 +323,7 @@ export default function Header() {
                         {[
                           { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
                           { label: "Orders", icon: FiSettings, href: "/dashboard/order" },
-                          { label: "Wallet", icon: FiPlus, href: "/dashboard/wallet" },
+                          ...(FEATURE_FLAGS.ENABLE_WALLET ? [{ label: "Wallet", icon: FiPlus, href: "/dashboard/wallet" }] : []),
                           { label: "Support", icon: FiLifeBuoy, href: "/dashboard/query" },
                           { label: "Leaderboard", icon: FiBarChart2, href: "/leaderboard" },
                         ].map((link, idx) => (
