@@ -4,8 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 
 /**
- * AtomicPulseLoader - A sophisticated, orbit-based futuristic loader.
- * Features 3-axis orbital rings and a core "singularity" glow.
+ * AuraPremiumLoader - A minimal, high-fidelity loader featuring
+ * concentric gradient aura rings and organic light pulses.
  */
 export default function PremiumLoader({ fullScreen = true }) {
   const containerClasses = fullScreen
@@ -14,96 +14,94 @@ export default function PremiumLoader({ fullScreen = true }) {
 
   return (
     <div className={containerClasses}>
-      {/* Background Ambient Depth */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--accent)]/5 blur-[100px] rounded-full" />
+      {/* Background Ambient Glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--accent)]/5 blur-[120px] rounded-full" />
       </div>
 
       <div className="relative flex flex-col items-center">
+        
+        {/* Aura Ring Assembly */}
+        <div className="relative w-32 h-32 flex items-center justify-center">
+            
+            {/* Outer Aura - Rotating Slow */}
+            <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 rounded-full border-[0.5px] border-dashed border-[var(--accent)]/30 scale-110"
+            />
 
-        {/* Orbital Assembly */}
-        <div className="relative w-24 h-24 flex items-center justify-center">
+            {/* Middle Gradient Ring - Rotating Fast Counter-clockwise */}
+            <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-2 rounded-full border-t border-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
+            />
 
-          {/* Ring 1 - Vertical Orbit */}
-          <div
-            className="animate-orbit-1 absolute inset-0 rounded-full border border-[var(--accent)]/20"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_15px_var(--accent)]" />
-          </div>
+            {/* Inner Shimmering Ring */}
+            <motion.div
+                animate={{ opacity: [0.3, 0.6, 0.3], scale: [0.95, 1.05, 0.95] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-6 rounded-full border border-[var(--accent)]/10 bg-gradient-to-tr from-[var(--accent)]/5 to-transparent backdrop-blur-[2px]"
+            />
 
-          {/* Ring 2 - Slanted Orbit */}
-          <div
-            className="animate-orbit-2 absolute inset-4 rounded-full border border-[var(--accent)]/15"
-            style={{ transformStyle: "preserve-3d", rotate: "45deg" }}
-          >
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--accent-hover)] shadow-[0_0_10px_var(--accent-hover)]" />
-          </div>
-
-          {/* Ring 3 - Horizontal Orbit */}
-          <div
-            className="animate-orbit-3 absolute inset-8 rounded-full border border-[var(--accent)]/10"
-            style={{ transformStyle: "preserve-3d", rotate: "-45deg" }}
-          >
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-[var(--foreground)] shadow-[0_0_8px_var(--foreground)]" />
-          </div>
-
-          {/* The Nucleus */}
-          <motion.div
-            animate={{
-              scale: [0.9, 1.1, 0.9],
-              opacity: [0.7, 1, 0.7],
-            }}
-            transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut" }}
-            className="w-5 h-5 rounded-full bg-[var(--accent)] relative z-10 shadow-[0_0_25px_rgba(var(--accent-rgb),0.5)]"
-          >
-            <div className="absolute inset-0 rounded-full bg-[var(--foreground)]/20 blur-[1px]" />
-          </motion.div>
-
+            {/* The Pulsing Core */}
+            <motion.div
+                animate={{ 
+                    scale: [0.8, 1.2, 0.8],
+                    opacity: [0.5, 1, 0.5],
+                    boxShadow: [
+                      "0 0 10px var(--accent)",
+                      "0 0 30px var(--accent)",
+                      "0 0 10px var(--accent)"
+                    ]
+                }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="w-3 h-3 rounded-full bg-[var(--accent)] z-20"
+            />
         </div>
 
-        {/* Brand/Status Module */}
-        <div className="mt-8 text-center">
+        {/* Status Module */}
+        <div className="mt-14 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center"
+            className="flex flex-col items-center space-y-4"
           >
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="w-1 h-1 rounded-full bg-[var(--accent)] animate-ping" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--foreground)]/90">
-                Happy <span className="text-[var(--accent)]">Core</span>
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[var(--foreground)]/80">
+                Happy <span className="text-[var(--accent)]">Official</span>
               </span>
+              <div className="mt-1 h-px w-24 bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent" />
             </div>
 
-            <div className="h-[1px] w-20 bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent" />
-
-            <motion.p
-              animate={{ opacity: [0.5, 0.9, 0.5] }}
-              transition={{ duration: 0.6, repeat: Infinity }}
-              className="mt-2.5 text-[7px] font-bold uppercase tracking-[0.2em] text-[var(--foreground)]/40"
+            <motion.div 
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="flex items-center gap-3 text-[8px] font-bold uppercase tracking-[0.3em] text-[var(--muted)]"
             >
-              Establishing Secure Connection...
-            </motion.p>
+              <span>Encrypted Data Stream</span>
+              <div className="flex gap-1">
+                 {[...Array(3)].map((_, i) => (
+                   <motion.div
+                      key={i}
+                      animate={{ scaleY: [1, 2, 1] }}
+                      transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
+                      className="w-[1.5px] h-2 bg-[var(--accent)]/40 rounded-full"
+                   />
+                 ))}
+              </div>
+            </motion.div>
           </motion.div>
         </div>
 
       </div>
 
-      {/* Decorative HUD Elements - Simplified */}
+      {/* Modern HUD Borders */}
       {fullScreen && (
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          <div className="absolute top-10 left-10 w-20 h-px bg-gradient-to-r from-[var(--accent)] to-transparent" />
-          <div className="absolute top-10 left-10 w-px h-10 bg-gradient-to-b from-[var(--accent)] to-transparent" />
-          <div className="absolute bottom-10 right-10 w-20 h-px bg-gradient-to-l from-[var(--accent)] to-transparent" />
-          <div className="absolute bottom-10 right-10 w-px h-10 bg-gradient-to-t from-[var(--accent)] to-transparent" />
-
-          <div className="absolute bottom-8 left-10">
-            <div className="grid grid-cols-2 gap-1 font-mono text-[7px] text-white/60">
-              <span>SYS_AUTH:</span> <span className="text-[var(--accent)]">OK</span>
-              <span>DATA_SYNC:</span> <span className="text-[var(--accent)]">READY</span>
-            </div>
-          </div>
+        <div className="absolute inset-10 pointer-events-none opacity-[0.05]">
+          <div className="absolute top-0 left-0 w-24 h-24 border-t-2 border-l-2 border-[var(--accent)] rounded-tl-[3rem]" />
+          <div className="absolute bottom-0 right-0 w-24 h-24 border-b-2 border-r-2 border-[var(--accent)] rounded-br-[3rem]" />
         </div>
       )}
     </div>
