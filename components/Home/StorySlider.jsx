@@ -10,7 +10,7 @@ const storyData = [
   {
     id: 2,
     title: "MLBB India",
-    image: "https://res.cloudinary.com/dk0sslz1q/image/upload/v1768500739/kapkap_20260115220221554_sys_inhh1f.jpg",
+    image: "/game-assets/11.jpg",
     link: "/games/mobile-legends988",
     color: "from-cyan-400 via-blue-500 to-indigo-600",
     isLive: true,
