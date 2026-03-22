@@ -25,7 +25,8 @@ import {
   Globe,
   TrendingUp,
   UserPlus,
-  UserCheck
+  UserCheck,
+  ShoppingBag
 } from "lucide-react";
 
 export default function UsersTab() {
@@ -251,11 +252,12 @@ export default function UsersTab() {
             <div className="hidden lg:block rounded-[1.5rem] overflow-hidden border border-[var(--border)] bg-[var(--card)]">
               <table className="w-full text-left text-sm">
                 <thead className="bg-[var(--foreground)]/[0.03] border-b border-[var(--border)] text-[var(--muted)]">
-                  <tr className="text-xs font-semibold">
+                  <tr className="text-[10px] uppercase font-bold tracking-widest">
                     <th className="px-6 py-4">User</th>
                     <th className="px-6 py-4">Contact</th>
+                    <th className="px-6 py-4">Wallet</th>
+                    <th className="px-6 py-4">Orders</th>
                     <th className="px-6 py-4">Role</th>
-                    <th className="px-6 py-4">Joined Date</th>
                     <th className="px-6 py-4 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -280,18 +282,26 @@ export default function UsersTab() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col text-[var(--muted)]">
-                          <span className="text-[var(--foreground)] font-medium text-xs">{u.email}</span>
-                          <span className="text-[11px] mt-0.5">{u.phone || "No phone linked"}</span>
+                          <span className="text-[var(--foreground)] font-medium text-xs truncate max-w-[150px]">{u.email}</span>
+                          <span className="text-[10px] mt-0.5">{u.phone || "No phone linked"}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[11px] font-semibold tracking-wide capitalize ${getRoleClass(u.userType)}`}>
+                        <span className="text-sm font-black text-emerald-500 tabular-nums">
+                          ₹{Number(u.wallet || 0).toLocaleString()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <ShoppingBag size={12} className="text-[var(--accent)]/50" />
+                          <span className="text-xs font-bold text-[var(--foreground)]">{u.order || 0}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-wide ${getRoleClass(u.userType)}`}>
                           {getRoleIcon(u.userType)}
                           {u.userType}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 text-xs font-medium text-[var(--muted)]">
-                        {new Date(u.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                       </td>
                       <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                         <RoleDropdown
@@ -318,18 +328,21 @@ export default function UsersTab() {
                   className="p-5 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.04] transition-all relative"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar user={u} />
-                      <div className="min-w-0">
-                        <p className="font-semibold text-[var(--foreground)] text-sm truncate">{u.name}</p>
-                        <p className="text-[11px] text-[var(--muted)]/60 font-mono truncate">{u.userId}</p>
+                      <div className="flex items-center gap-3">
+                        <Avatar user={u} />
+                        <div className="min-w-0 text-left">
+                          <p className="font-bold text-[var(--foreground)] text-sm truncate">{u.name}</p>
+                          <p className="text-[10px] text-[var(--muted)]/60 font-mono truncate">{u.userId}</p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1.5 text-right">
+                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-md border text-[8px] font-bold uppercase tracking-widest ${getRoleClass(u.userType)}`}>
+                          {getRoleIcon(u.userType)}
+                          {u.userType}
+                        </span>
+                        <p className="text-sm font-black text-emerald-500">₹{Number(u.wallet || 0).toLocaleString()}</p>
                       </div>
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[10px] font-semibold capitalize ${getRoleClass(u.userType)}`}>
-                      {getRoleIcon(u.userType)}
-                      {u.userType}
-                    </span>
-                  </div>
 
                   <div className="space-y-3">
                     <div className="space-y-1">
@@ -453,6 +466,10 @@ export default function UsersTab() {
                 <DrawerSection icon={<Mail size={18} />} title="Contact Information">
                   <DrawerDetail label="Email" value={selectedUser.email} />
                   <DrawerDetail label="Phone" value={selectedUser.phone || "Not provided"} />
+                </DrawerSection>
+                <DrawerSection icon={<TrendingUp size={18} />} title="Usage Metrics">
+                  <DrawerDetail label="Wallet Balance" value={`₹${Number(selectedUser.wallet || 0).toLocaleString()}`} emphasize />
+                  <DrawerDetail label="Total Orders" value={selectedUser.order || 0} />
                 </DrawerSection>
 
                 <DrawerSection icon={<Activity size={18} />} title="Activity">
@@ -723,40 +740,42 @@ function DrawerDetail({ label, value }) {
 function StatCard({ title, newUsers, activeUsers, loading }) {
   if (loading) {
     return (
-      <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-32">
-        <div className="h-4 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
-        <div className="space-y-3">
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+      <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] animate-pulse h-20">
+        <div className="h-2 bg-[var(--foreground)]/10 rounded w-1/4 mb-4"></div>
+        <div className="flex gap-4">
+          <div className="h-6 bg-[var(--foreground)]/5 rounded w-full"></div>
+          <div className="h-6 bg-[var(--foreground)]/5 rounded w-full"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
-      <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
-
-      <div className="flex items-center justify-between mb-4 relative z-10">
-        <h3 className="text-sm font-bold text-[var(--foreground)]">{title}</h3>
-        <TrendingUp size={16} className="text-[var(--accent)]/60" />
+    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all group">
+      <div className="flex items-center justify-between mb-3 relative z-10">
+        <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--muted)]/60 group-hover:text-[var(--accent)] transition-colors">{title}</h3>
+        <TrendingUp size={14} className="text-[var(--accent)]/30 group-hover:text-[var(--accent)] group-hover:scale-110 transition-all" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 relative z-10">
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <UserPlus size={12} className="text-blue-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">New</span>
+      <div className="flex items-center gap-8 relative z-10">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-blue-500/5 flex items-center justify-center border border-blue-500/10">
+            <UserPlus size={14} className="text-blue-500" />
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{newUsers}</span>
+          <div className="flex flex-col">
+            <span className="text-[9px] font-bold text-[var(--muted)]/50 uppercase leading-none mb-1">New</span>
+            <span className="text-lg font-black text-[var(--foreground)] leading-none">{newUsers}</span>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <UserCheck size={12} className="text-emerald-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">Active</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/5 flex items-center justify-center border border-emerald-500/10">
+            <UserCheck size={14} className="text-emerald-500" />
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{activeUsers}</span>
+          <div className="flex flex-col">
+            <span className="text-[9px] font-bold text-[var(--muted)]/50 uppercase leading-none mb-1">Active</span>
+            <span className="text-lg font-black text-[var(--foreground)] leading-none">{activeUsers}</span>
+          </div>
         </div>
       </div>
     </div>

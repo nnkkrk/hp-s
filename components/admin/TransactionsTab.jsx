@@ -170,6 +170,7 @@ export default function TransactionsTab() {
                     <th className="px-6 py-4">Order ID</th>
                     <th className="px-6 py-4">User Info</th>
                     <th className="px-6 py-4">Game</th>
+                    <th className="px-6 py-4">Method</th>
                     <th className="px-6 py-4">Status</th>
                     <th className="px-6 py-4 text-right">Amount</th>
                   </tr>
@@ -205,6 +206,11 @@ export default function TransactionsTab() {
                           <span className="flex items-center gap-2 text-[10px] font-bold uppercase text-[var(--muted)]/60">
                             <Gamepad2 size={12} className="text-[var(--accent)]" />
                             {t.gameSlug}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-[10px] font-bold uppercase text-[var(--foreground)] px-3 py-1 bg-[var(--foreground)]/[0.04] rounded-md border border-[var(--border)]">
+                            {t.paymentMethod}
                           </span>
                         </td>
                         <td className="px-6 py-4">
@@ -246,7 +252,10 @@ export default function TransactionsTab() {
                         </span>
                         <p className="text-[10px] font-mono text-[var(--muted)]/40 uppercase mt-1">{t.orderId}</p>
                       </div>
-                      <span className="text-lg font-black text-emerald-500 tracking-tighter">₹{t.price}</span>
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-lg font-black text-emerald-500 tracking-tighter">₹{t.price}</span>
+                        <span className="text-[9px] font-bold uppercase text-[var(--muted)]/50">{t.paymentMethod}</span>
+                      </div>
                     </div>
 
                     <div className="flex items-center justify-between text-[11px]">
@@ -322,24 +331,24 @@ export default function TransactionsTab() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1002] flex flex-col"
             >
-              <div className="p-8 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
-                <div className="flex items-start justify-between mb-8">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">Transaction Status</p>
-                    <h3 className="text-2xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Payment Details</h3>
+              <div className="p-6 border-b border-[var(--border)] bg-gradient-to-br from-[var(--foreground)]/[0.03] to-transparent">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                    <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-widest">Order ID</span>
+                    <h3 className="text-sm sm:text-base font-bold text-[var(--foreground)] font-mono uppercase tracking-tight break-all">{selectedTx.orderId}</h3>
                   </div>
                   <button
                     onClick={() => setSelectedTx(null)}
-                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all"
+                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all outline-none"
                   >
                     <X size={20} />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-6 rounded-3xl bg-[var(--accent)]/5 border border-[var(--accent)]/10">
-                  <div>
-                    <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">Total Amount</p>
-                    <span className="text-3xl font-black text-emerald-500 tabular-nums">₹{selectedTx.price}</span>
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm">
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-bold text-[var(--muted)]/50 uppercase tracking-widest mb-1">Total Amount</span>
+                    <span className="text-2xl font-black text-emerald-500 tabular-nums">₹{selectedTx.price}</span>
                   </div>
                   {(() => {
                     const meta = statusMeta[selectedTx.status] || statusMeta.pending;
@@ -377,8 +386,8 @@ export default function TransactionsTab() {
                   <DrawerDetail label="Date & Time" value={new Date(selectedTx.createdAt).toLocaleString()} />
                 </DrawerSection>
 
-                <div className="pt-6 border-t border-[var(--border)] opacity-20">
-                  <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-center text-[var(--foreground)]">Order ID: {selectedTx.orderId.toUpperCase()}</p>
+                <div className="pt-6 border-t border-[var(--border)] opacity-0">
+                  {/* Order ID moved to top */}
                 </div>
               </div>
             </motion.div>

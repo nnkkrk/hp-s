@@ -153,7 +153,7 @@ export default function Header() {
             {[
               { name: "Games", href: "/games", icon: FiGrid },
               { name: "Services", href: "/services", icon: FiLayers },
-              { name: "Regions", href: "/regions", icon: FiGlobe }
+              { name: "Regions", href: "/region", icon: FiGlobe }
             ].map((item) => (
               <Link
                 key={item.name}

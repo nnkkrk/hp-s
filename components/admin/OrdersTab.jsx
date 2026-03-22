@@ -315,11 +315,12 @@ export default function OrdersTab() {
               <table className="w-full text-left text-sm">
                 <thead className="bg-[var(--foreground)]/[0.03] border-b border-[var(--border)]">
                   <tr className="text-[10px] uppercase font-bold tracking-widest text-[var(--muted)]">
-                    <th className="px-6 py-4">Game</th>
+                    <th className="px-6 py-4">Game / User</th>
                     <th className="px-6 py-4">Date/Time</th>
                     <th className="px-6 py-4">Item</th>
+                    <th className="px-6 py-4">Method</th>
                     <th className="px-6 py-4">Price</th>
-                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border)]">
@@ -339,7 +340,10 @@ export default function OrdersTab() {
                             <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)]">
                               <Gamepad2 size={16} />
                             </div>
-                            <span className="text-[var(--foreground)] font-bold uppercase text-xs">{o.gameSlug}</span>
+                            <div className="flex flex-col">
+                              <span className="text-[var(--foreground)] font-bold uppercase text-xs">{o.gameSlug}</span>
+                              <span className="text-[10px] text-[var(--muted)]/60 truncate max-w-[130px]">{o.email || "Guest"}</span>
+                            </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -353,11 +357,16 @@ export default function OrdersTab() {
                           <span className="text-[10px] text-[var(--muted)]/40 font-mono uppercase">{o.orderId}</span>
                         </td>
                         <td className="px-6 py-4">
+                          <span className="text-[10px] font-bold uppercase text-[var(--foreground)] px-2.5 py-1 bg-[var(--foreground)]/[0.04] rounded-md border border-[var(--border)] whitespace-nowrap">
+                            {o.paymentMethod || "N/A"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
                           <span className="text-base font-black text-emerald-500 tabular-nums">
                             ₹{o.price}
                           </span>
                         </td>
-                        <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                        <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                           <StatusDropdown
                             value={o.status}
                             disabled={updating}
@@ -390,15 +399,21 @@ export default function OrdersTab() {
                     onClick={() => setSelectedOrder(o)}
                     className="p-5 rounded-[1.8rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.05] transition-all"
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)]">
-                          <Gamepad2 size={16} />
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--accent)]">
+                            <Gamepad2 size={16} />
+                          </div>
+                          <div className="flex flex-col">
+                            <p className="font-bold text-[var(--foreground)] uppercase text-xs tracking-tight">{o.gameSlug}</p>
+                            <p className="text-[10px] text-[var(--muted)]/50 truncate max-w-[120px]">{o.email || "Guest"}</p>
+                          </div>
                         </div>
-                        <p className="font-bold text-[var(--foreground)] uppercase text-xs tracking-tight">{o.gameSlug}</p>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-lg font-black text-emerald-500">₹{o.price}</span>
+                          <span className="text-[9px] font-bold uppercase text-[var(--muted)]/40">{o.paymentMethod}</span>
+                        </div>
                       </div>
-                      <span className="text-lg font-black text-emerald-500">₹{o.price}</span>
-                    </div>
 
                     <div className="space-y-3">
                       <div>
@@ -484,40 +499,38 @@ export default function OrdersTab() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-8 border-b border-[var(--border)] bg-gradient-to-r from-[var(--foreground)]/[0.02] to-transparent">
-                <div className="flex items-start justify-between mb-8">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest">Order Management</p>
-                    <h3 className="text-2xl font-black uppercase italic tracking-tighter text-[var(--foreground)]">Order Details</h3>
+              <div className="p-6 border-b border-[var(--border)] bg-gradient-to-br from-[var(--foreground)]/[0.03] to-transparent">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                    <span className="text-[9px] font-black text-[var(--accent)] uppercase tracking-widest">Order ID</span>
+                    <h3 className="text-sm sm:text-base font-bold text-[var(--foreground)] font-mono uppercase tracking-tight break-all">{selectedOrder.orderId}</h3>
                   </div>
                   <button
                     onClick={() => setSelectedOrder(null)}
-                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all"
+                    className="w-10 h-10 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all outline-none"
                   >
                     <X size={20} />
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between p-6 rounded-3xl bg-[var(--foreground)]/[0.02] border border-[var(--border)]">
-                  <div>
-                    <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest mb-1">Price</p>
-                    <span className="text-3xl font-black text-emerald-500 tabular-nums">₹{selectedOrder.price}</span>
+                <div className="flex items-center justify-between p-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm">
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-bold text-[var(--muted)]/50 uppercase tracking-widest mb-1">Total Amount</span>
+                    <span className="text-2xl font-black text-emerald-500 tabular-nums">₹{selectedOrder.price}</span>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <StatusDropdown
-                      value={selectedOrder.status}
-                      onChange={(v) => {
-                        updateOrderStatus(selectedOrder.orderId, v);
-                        setSelectedOrder(null);
-                      }}
-                      options={[
-                        { value: "pending", label: "Pending" },
-                        { value: "success", label: "Success" },
-                        { value: "failed", label: "Failed" },
-                        { value: "refund", label: "Refund" },
-                      ]}
-                    />
-                  </div>
+                  <StatusDropdown
+                    value={selectedOrder.status}
+                    onChange={(v) => {
+                      updateOrderStatus(selectedOrder.orderId, v);
+                      setSelectedOrder(null);
+                    }}
+                    options={[
+                      { value: "pending", label: "Pending" },
+                      { value: "success", label: "Success" },
+                      { value: "failed", label: "Failed" },
+                      { value: "refund", label: "Refund" },
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -545,8 +558,8 @@ export default function OrdersTab() {
                   <DrawerDetail label="Order Date" value={new Date(selectedOrder.createdAt).toLocaleString()} />
                 </DrawerSection>
 
-                <div className="pt-6 border-t border-[var(--border)] opacity-20">
-                  <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-center text-[var(--foreground)]">Deployment ID: {selectedOrder.orderId.toUpperCase()}</p>
+                <div className="pt-6 border-t border-[var(--border)] opacity-0">
+                  {/* Deployment ID moved to top */}
                 </div>
               </div>
             </motion.div>
@@ -663,40 +676,42 @@ function DrawerDetail({ label, value, emphasize }) {
 function StatCard({ title, count, totalValue, loading }) {
   if (loading) {
     return (
-      <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] animate-pulse flex flex-col justify-between h-32">
-        <div className="h-4 bg-[var(--foreground)]/10 rounded w-1/3 mb-4"></div>
-        <div className="space-y-3">
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
-          <div className="h-8 bg-[var(--foreground)]/5 rounded w-full"></div>
+      <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] animate-pulse h-20">
+        <div className="h-2 bg-[var(--foreground)]/10 rounded w-1/4 mb-4"></div>
+        <div className="flex gap-4">
+          <div className="h-6 bg-[var(--foreground)]/5 rounded w-full"></div>
+          <div className="h-6 bg-[var(--foreground)]/5 rounded w-full"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--card)] relative overflow-hidden group">
-      <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-colors duration-500" />
-
-      <div className="flex items-center justify-between mb-4 relative z-10">
-        <h3 className="text-sm font-bold text-[var(--foreground)]">{title}</h3>
-        <TrendingUp size={16} className="text-[var(--accent)]/60" />
+    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all group">
+      <div className="flex items-center justify-between mb-3 relative z-10">
+        <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--muted)]/60 group-hover:text-[var(--accent)] transition-colors">{title}</h3>
+        <TrendingUp size={14} className="text-[var(--accent)]/30 group-hover:text-[var(--accent)] group-hover:scale-110 transition-all" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 relative z-10">
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <Package size={12} className="text-blue-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">Count</span>
+      <div className="flex items-center gap-6 relative z-10">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-blue-500/5 flex items-center justify-center border border-blue-500/10">
+            <Package size={14} className="text-blue-500" />
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">{count}</span>
+          <div className="flex flex-col">
+            <span className="text-[9px] font-bold text-[var(--muted)]/50 uppercase leading-none mb-1">Orders</span>
+            <span className="text-lg font-black text-[var(--foreground)] leading-none">{count}</span>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1 bg-[var(--foreground)]/[0.02] p-3 rounded-xl border border-[var(--border)]">
-          <div className="flex items-center gap-1.5 text-[var(--muted)] mb-1">
-            <IndianRupee size={12} className="text-emerald-500" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider">Revenue</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/5 flex items-center justify-center border border-emerald-500/10">
+            <IndianRupee size={14} className="text-emerald-500" />
           </div>
-          <span className="text-xl font-black text-[var(--foreground)] tracking-tight">₹{Number(totalValue || 0).toLocaleString()}</span>
+          <div className="flex flex-col">
+            <span className="text-[9px] font-bold text-[var(--muted)]/50 uppercase leading-none mb-1">Revenue</span>
+            <span className="text-lg font-black text-[var(--foreground)] leading-none">₹{Number(totalValue || 0).toLocaleString()}</span>
+          </div>
         </div>
       </div>
     </div>
