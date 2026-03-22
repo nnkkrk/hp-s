@@ -7,8 +7,15 @@ export default function ValidationStep({
   zoneId,
   setZoneId,
   onValidate,
-  loading, // 👈 NEW
+  loading,
+  error,
+  setError,
 }) {
+  const handleChange = (setter) => (e) => {
+    setter(e.target.value);
+    if (error) setError("");
+  };
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between mb-2">
@@ -18,23 +25,30 @@ export default function ValidationStep({
 
       <input
         value={playerId}
-        onChange={(e) => setPlayerId(e.target.value)}
+        onChange={handleChange(setPlayerId)}
         placeholder="Enter Player ID"
-        className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
+        className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full outline-hidden focus:border-[var(--accent)] transition"
         disabled={loading}
       />
 
       <input
         value={zoneId}
-        onChange={(e) => setZoneId(e.target.value)}
+        onChange={handleChange(setZoneId)}
         placeholder="Enter Zone ID"
-        className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full"
+        className="p-3 rounded-lg bg-black/20 border border-gray-700 w-full outline-hidden focus:border-[var(--accent)] transition"
         disabled={loading}
       />
+
+      {error && (
+        <div className="p-3 rounded-lg bg-red-600/20 border border-red-600/50 text-red-500 text-sm font-medium animate-in fade-in zoom-in-95 duration-200">
+          ⚠️ {error}
+        </div>
+      )}
 
       <button
         onClick={onValidate}
         disabled={loading}
+
         className={`py-3 rounded-lg w-full font-semibold transition
           ${
             loading

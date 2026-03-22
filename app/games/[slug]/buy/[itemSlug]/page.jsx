@@ -19,6 +19,8 @@ export default function BuyFlowPage() {
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
 
   /* ================= USER DATA ================= */
   const [userEmail, setUserEmail] = useState("");
@@ -100,6 +102,8 @@ export default function BuyFlowPage() {
     }
 
     setLoading(true);
+    setError("");
+
 
     const res = await fetch("/api/check-region", {
       method: "POST",
@@ -110,7 +114,30 @@ export default function BuyFlowPage() {
     const data = await res.json();
 
     if (data?.success !== 200) {
-      alert("Invalid Player ID / Zone ID");
+      setError("Invalid Player ID / Zone ID");
+      setLoading(false);
+      return;
+    }
+
+    const { username, region } = data.data || {};
+
+    if (!username && !region) {
+      setError("Could not verify player details.");
+      setLoading(false);
+      return;
+    }
+
+    // Filter restricted regions for mobile-legends988
+    const restrictedRegions = ["INDO", "ID", "PH", "SG", "RU", "MY", "MM"];
+    const playerRegion = region?.toUpperCase();
+
+    if (
+      (slug === "mobile-legends988" ||
+        slug === "mlbb-double332" ||
+        slug === "weeklymonthly-bundle931") &&
+      restrictedRegions.includes(playerRegion)
+    ) {
+      setError(`Orders from ${playerRegion} region are not allowed for this product.`);
       setLoading(false);
       return;
     }
@@ -118,17 +145,18 @@ export default function BuyFlowPage() {
     saveVerifiedPlayer({
       playerId,
       zoneId,
-      username: data.data.username,
-      region: data.data.region,
+      username: username,
+      region: region,
       savedAt: Date.now(),
     });
 
     setReviewData({
-      userName: data.data.username,
-      region: data.data.region,
+      userName: username,
+      region: region,
       playerId,
       zoneId,
     });
+
 
     setLoading(false);
     setStep(2);
@@ -195,7 +223,10 @@ export default function BuyFlowPage() {
                 setZoneId={setZoneId}
                 onValidate={handleValidate}
                 loading={loading}
+                error={error}
+                setError={setError}
               />
+
             )}
 
             {/* STEP 2 & 3 */}
