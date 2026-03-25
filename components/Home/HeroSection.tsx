@@ -42,9 +42,6 @@ export default function HeroSection() {
       <HomeQuickActions />
 
       <GamesPage />
-      <ScrollingNoticeBand />
-
-
       <HomeServices />
       {/* <TrustHighlights /> */}
 
