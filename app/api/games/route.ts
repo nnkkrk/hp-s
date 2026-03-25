@@ -148,10 +148,10 @@ export async function GET() {
       "ph-value-pass588",
       "where-winds-meet280",
       "pubg-mobile138",
-      "magic-chess-gogo-india924",
+      // "magic-chess-gogo-india924",
       "mlbb-indo42",
       "mlbb-russia953",
-      "sgmy-mlbb893"
+      // "sgmy-mlbb893"
     ];
 
     const filteredGames =

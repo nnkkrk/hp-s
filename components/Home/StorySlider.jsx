@@ -26,6 +26,16 @@ const storyData = [
   //   label: "TOP"
   // },
   {
+    id: 3,
+    title: "MLBB Double",
+    game: "MLBB",
+    image: "/game-assets/double.jpg",
+    link: "/games/mlbb-double332",
+    color: "from-fuchsia-400 via-purple-500 to-violet-600",
+    isLive: false,
+    label: "HOT"
+  },
+  {
     id: 4,
     title: " Bundles",
     image: "/game-assets/bundle-weekly.jpg",
