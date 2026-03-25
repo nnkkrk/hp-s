@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, MessageCircle, Crown, Flame } from "lucide-react";
+import { X, ArrowRight, MessageCircle, Crown, Flame, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 const STORAGE_KEY = "hide_notice_banner";
@@ -16,29 +16,26 @@ const BANNERS = [
   {
     id: "channel",
     title: "WHATSAPP CHANNEL",
-    subtitle: "UNLOCK EXCLUSIVE DEALS & DAILY GIVEAWAYS!",
-    cta: "JOIN NOW",
+    subtitle: "Unlock exclusive deals & daily giveaways!",
+    cta: "Join Now",
     link: SUPPORT_WHATSAPP_URL,
     icon: MessageCircle,
-    glow: "rgba(16, 185, 129, 0.08)",
   },
   {
     id: "sale",
     title: "FLASH SALE ALERT 🔥",
-    subtitle: "GET UP TO 30% OFF ON BGMI UC TODAY.",
-    cta: "SHOP NOW",
+    subtitle: "Get up to 30% OFF on BGMI UC today.",
+    cta: "Shop Now",
     link: "/games/bgmi",
     icon: Flame,
-    glow: "rgba(249, 115, 22, 0.08)",
   },
   {
     id: "membership",
     title: "PRO MEMBERSHIP",
-    subtitle: "ZERO FEES, INSTANT DELIVERY & VIP SUPPORT.",
-    cta: "UPGRADE",
+    subtitle: "Zero fees, instant delivery & VIP support.",
+    cta: "Upgrade",
     link: "/membership",
     icon: Crown,
-    glow: "rgba(245, 158, 11, 0.08)",
   },
 ];
 
@@ -71,26 +68,28 @@ export default function TopNoticeBanner() {
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="relative z-[70] bg-black/40 backdrop-blur-xl border-b border-white/5 overflow-hidden"
+          className="relative z-[70] bg-[var(--card)]/80 backdrop-blur-2xl border-b border-[var(--border)] overflow-hidden"
         >
-          {/* DYNAMIC BACKGROUND GLOW */}
-          <motion.div
-            key={banner.id + "-glow"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 transition-colors duration-1000"
-            style={{ backgroundColor: banner.glow }}
-          />
+          {/* Subtle Ambient Shimmer */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none opacity-20 overflow-hidden">
+            <div className="absolute top-0 -left-1/2 w-full h-full bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent skew-x-12 animate-shimmer" 
+                 style={{ animationDuration: '4s' }} />
+          </div>
 
-          <div className="max-w-7xl mx-auto px-4 py-1.5 sm:py-2 flex items-center justify-between gap-4 relative">
+          <div className="max-w-7xl mx-auto px-4 py-1 sm:py-2 flex items-center justify-between gap-4 relative">
             <Link
               href={banner.link}
               className="flex-1 flex items-center justify-center sm:justify-start gap-4 group cursor-pointer"
             >
-              {/* STATUS INDICATOR */}
-              <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Live</span>
+              {/* Premium Status Light */}
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--foreground)]/[0.03] border border-[var(--border)] transition-all group-hover:bg-[var(--accent)]/[0.05] group-hover:border-[var(--accent)]/20">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]"></span>
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--foreground)]/60 group-hover:text-[var(--accent)] transition-colors">
+                  Live Update
+                </span>
               </div>
 
               {/* CONTENT AREA */}
@@ -98,57 +97,62 @@ export default function TopNoticeBanner() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={banner.id}
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -20, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 w-full"
+                    initial={{ y: 8, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -8, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-center gap-2 sm:gap-4 w-full"
                   >
-                    <div className="flex items-center gap-2">
-                      <Icon size={14} className="text-amber-500" />
-                      <span className="text-xs font-black italic uppercase tracking-tighter text-white">
+                    <div className="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
+                      <Icon size={13} className="text-[var(--accent)]" />
+                      <span className="text-[11px] sm:text-xs font-black uppercase tracking-tight text-[var(--foreground)]">
                         {banner.title}
                       </span>
                     </div>
-                    <span className="hidden sm:block w-[1px] h-3 bg-white/10" />
-                    <span className="text-[10px] sm:text-xs font-bold text-white/40 group-hover:text-white transition-colors truncate uppercase tracking-widest leading-none">
+                    
+                    <span className="hidden sm:block w-[1px] h-3 bg-[var(--border)]" />
+                    
+                    <span className="text-[10px] sm:text-xs font-medium text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors truncate">
                       {banner.subtitle}
                     </span>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* CTA LINK */}
-              <div className="hidden md:flex items-center gap-2 group/cta">
-                <span className="text-[11px] font-black italic uppercase tracking-[0.2em] text-amber-500">
+              {/* CTA */}
+              <div className="hidden md:flex items-center gap-1.5 group/cta">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--accent)] opacity-80 group-hover:opacity-100 transition-opacity">
                   {banner.cta}
                 </span>
-                <div className="w-6 h-6 rounded-full bg-amber-500/10 flex items-center justify-center group-hover/cta:bg-amber-500 transition-all">
-                  <ArrowRight size={10} className="text-amber-500 group-hover/cta:text-black transition-colors" />
+                <div className="flex items-center justify-center transition-transform group-hover/cta:translate-x-1">
+                  <ArrowRight size={12} className="text-[var(--accent)]" />
                 </div>
               </div>
             </Link>
 
-            {/* CLOSE ACTION */}
+            {/* Close Button */}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 setVisible(false);
                 localStorage.setItem(STORAGE_KEY, "true");
               }}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/20 hover:text-white transition-all group"
+              className="p-1.5 rounded-full hover:bg-[var(--foreground)]/[0.05] transition-colors group"
             >
-              <X size={14} className="group-hover:rotate-90 transition-transform duration-300" />
+              <X size={14} className="text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors" />
             </button>
           </div>
 
-          {/* ELEGANT PROGRESS TRACKER */}
-          <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-white/5">
+          {/* Premium Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[var(--border)]/20">
             <motion.div
               key={index}
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
               transition={{ duration: ROTATE_INTERVAL / 1000, ease: "linear" }}
-              className="h-full bg-gradient-to-r from-transparent via-amber-500 to-transparent"
+              style={{ originX: 0 }}
+              className="h-full bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-60"
             />
           </div>
         </motion.div>

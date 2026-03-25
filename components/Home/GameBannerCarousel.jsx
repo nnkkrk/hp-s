@@ -11,7 +11,7 @@ import Loader from "@/components/Loader/Loader";
 export default function GameBannerCarousel() {
   const [banners, setBanners] = useState([]);
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(0); // -1 for left, 1 for right
+  const [direction, setDirection] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -39,7 +39,7 @@ export default function GameBannerCarousel() {
     const id = setInterval(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % banners.length);
-    }, 6000);
+    }, 7000);
     return () => clearInterval(id);
   }, [banners.length, isHovered]);
 
@@ -55,21 +55,21 @@ export default function GameBannerCarousel() {
 
   const slideVariants = {
     enter: (direction) => ({
-      x: direction > 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: 1.1,
+      scale: 1.05,
+      filter: "blur(10px)",
     }),
     center: {
       zIndex: 1,
-      x: 0,
       opacity: 1,
       scale: 1,
+      filter: "blur(0px)",
     },
     exit: (direction) => ({
       zIndex: 0,
-      x: direction < 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: 0.9,
+      scale: 0.95,
+      filter: "blur(5px)",
     }),
   };
 
@@ -78,14 +78,14 @@ export default function GameBannerCarousel() {
 
   return (
     <div
-      className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-4 md:mt-10 select-none group overflow-hidden"
+      className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 mt-6 md:mt-12 select-none group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* BACKGROUND GLOW */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[150%] max-w-5xl bg-[var(--accent)]/5 blur-[120px] pointer-events-none opacity-40 z-0" />
+      {/* AMBIENT BACKGROUND GLOW */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] max-w-6xl bg-[var(--accent)]/5 blur-[160px] pointer-events-none opacity-50 z-0" />
 
-      <div className="relative h-[200px] sm:h-[300px] md:h-[450px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl bg-black">
+      <div className="relative h-[240px] sm:h-[350px] md:h-[500px] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden border border-[var(--border)] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-black">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
@@ -95,18 +95,18 @@ export default function GameBannerCarousel() {
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 300, damping: 32 },
-              opacity: { duration: 0.4 },
-              scale: { duration: 0.6 }
+              opacity: { duration: 0.6, ease: "easeInOut" },
+              scale: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+              filter: { duration: 0.4 }
             }}
             className="absolute inset-0 w-full h-full"
           >
-            <Link href={banners[current].bannerLink || "/"} className="block w-full h-full relative group/banner">
-              {/* IMAGE WITH KEN BURNS EFFECT */}
+            <Link href={banners[current].bannerLink || "/"} className="block w-full h-full relative overflow-hidden group/banner">
+              {/* IMAGE WITH SMOOTH KEN BURNS */}
               <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: 1.1 }}
-                transition={{ duration: 10, ease: "linear" }}
+                initial={{ scale: 1.15 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 8, ease: "easeOut" }}
                 className="absolute inset-0 w-full h-full"
               >
                 <Image
@@ -118,60 +118,61 @@ export default function GameBannerCarousel() {
                 />
               </motion.div>
 
-              {/* PREMIUM OVERLAYS */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent opacity-40" />
+              {/* MODERN GRADIENT OVERLAYS */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent opacity-40" />
 
-              {/* CONTENT BOX */}
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-20">
+              {/* CONTENT AREA */}
+              <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-24">
                 <motion.div
-                  initial={{ y: 30, opacity: 0 }}
+                  initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="space-y-3 md:space-y-6 max-w-4xl"
+                  transition={{ delay: 0.4, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-4 md:space-y-8 max-w-5xl"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_#f59e0b] animate-pulse" />
-                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-white/50">Exclusive Drop</span>
+                  <div className="flex items-center gap-3">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]"></span>
+                    </span>
+                    <span className="text-[10px] md:text-xs font-extrabold uppercase tracking-[0.4em] text-white/60">Exclusive Access</span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white leading-[0.85] drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                  <h2 className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-[0.9] drop-shadow-2xl">
                     {banners[current].bannerTitle}
                   </h2>
 
-                  <p className="text-[10px] md:text-base font-bold text-white/40 max-w-2xl uppercase tracking-[0.1em] line-clamp-2 leading-relaxed">
-                    {banners[current].bannerSummary || "EXPERIENCE THE FUTURE OF GAMING WITH INSTANT TOP-UPS AND UNBEATABLE PRICES."}
+                  <p className="text-xs md:text-lg font-medium text-white/50 max-w-3xl leading-relaxed line-clamp-2">
+                    {banners[current].bannerSummary || "Experience premium gaming top-ups with instant delivery and the best rates in the industry."}
                   </p>
-
-
                 </motion.div>
               </div>
 
-              {/* VIGNETTE */}
-              <div className="absolute inset-0 border border-white/5 rounded-[2rem] md:rounded-[3.5rem] pointer-events-none" />
+              {/* VIGNETTE BORDER */}
+              <div className="absolute inset-0 border border-white/10 rounded-[2.5rem] md:rounded-[4rem] pointer-events-none" />
             </Link>
           </motion.div>
         </AnimatePresence>
 
-        {/* NAVIGATION BUTTONS (DESKTOP ONLY) */}
-        <div className="hidden lg:block">
+        {/* PREMIUM NAVIGATION CONTROLS */}
+        <div className="hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity duration-500">
           <button
             onClick={(e) => { e.preventDefault(); goPrev(); }}
-            className="absolute left-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-black hover:scale-110"
+            className="absolute left-10 top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white flex items-center justify-center z-20 transition-all hover:bg-white hover:text-black hover:scale-110 shadow-2xl"
           >
-            <FiChevronLeft size={24} />
+            <FiChevronLeft size={28} />
           </button>
           <button
             onClick={(e) => { e.preventDefault(); goNext(); }}
-            className="absolute right-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:text-black hover:scale-110"
+            className="absolute right-10 top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-white flex items-center justify-center z-20 transition-all hover:bg-white hover:text-black hover:scale-110 shadow-2xl"
           >
-            <FiChevronRight size={24} />
+            <FiChevronRight size={28} />
           </button>
         </div>
       </div>
 
-      {/* PROGRESS INDICATORS */}
-      <div className="flex justify-center items-center gap-4 mt-8">
+      {/* MODERN PAGINATION DOTS */}
+      <div className="flex justify-center items-center gap-6 mt-10">
         {banners.map((_, i) => (
           <button
             key={i}
@@ -179,18 +180,19 @@ export default function GameBannerCarousel() {
               setDirection(i > current ? 1 : -1);
               setCurrent(i);
             }}
-            className="h-4 flex items-center group/dot"
+            className="relative py-2 px-1 group/dot pointer-events-auto"
           >
-            <div className={`h-[2px] rounded-full transition-all duration-700 relative overflow-hidden ${current === i
-              ? "w-12 bg-white"
-              : "w-4 bg-white/10 group-hover/dot:bg-white/30"
+            <div className={`h-[3px] rounded-full transition-all duration-700 relative overflow-hidden shadow-sm ${current === i
+              ? "w-16 bg-white"
+              : "w-6 bg-white/20 group-hover/dot:bg-white/40"
               }`}>
               {current === i && (
                 <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "100%" }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 bg-amber-500"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 7, ease: "linear" }}
+                  style={{ originX: 0 }}
+                  className="absolute inset-0 bg-[var(--accent)]"
                 />
               )}
             </div>

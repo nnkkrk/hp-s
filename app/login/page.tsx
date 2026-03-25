@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { RiShieldKeyholeFill, RiLockPasswordLine } from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
 
 export default function AuthPage() {
   const [loading, setLoading] = useState(false);
@@ -45,78 +46,75 @@ export default function AuthPage() {
   };
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[var(--background)] px-4">
-      {/* ================= SIMPLE PREMIUM BACKGROUND ================= */}
+    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[var(--background)] px-4 font-sans">
+      {/* ================= PREMIUM THEMED BACKGROUND ================= */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Soft, Static Mesh Gradient */}
-        <div className="absolute -top-[20%] -left-[10%] w-[100vw] h-[100vw] rounded-full bg-[var(--accent)]/5 blur-[150px] opacity-50" />
-        <div className="absolute -bottom-[20%] -right-[10%] w-[80vw] h-[80vw] rounded-full bg-indigo-500/5 blur-[150px] opacity-50" />
-
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] bg-[size:60px_60px] opacity-[0.03] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_60%,transparent_100%)]" />
+        {/* Dynamic accent glows that follow the current theme */}
+        <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-[var(--accent)]/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[var(--accent)]/5 blur-[120px]" />
+        
+        {/* Subtle noise texture for that tactile premium feel */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay invert dark:invert-0" 
+             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
       </div>
 
       {/* ================= LOGIN CARD ================= */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, scale: 0.98, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="
-          relative z-10 w-full max-w-md
-          rounded-[2rem]
-          bg-[var(--card)]/40 backdrop-blur-xl
+          relative z-10 w-full max-w-[400px]
+          rounded-[2.5rem]
+          bg-[var(--card)]/40 backdrop-blur-3xl
           border border-[var(--border)]
-          shadow-[0_8px_32px_rgba(0,0,0,0.12)]
+          shadow-[0_24px_48px_-12px_rgba(0,0,0,0.1)]
           overflow-hidden
         "
       >
-        <div className="p-10 md:p-12 flex flex-col items-center text-center">
+        <div className="p-8 md:p-10 flex flex-col items-center">
 
-          {/* Minimal Logo Container */}
+          {/* Premium Logo Container */}
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
+            transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+            className="mb-10 relative group"
           >
-            <div className="relative w-20 h-20 rounded-2xl bg-[var(--background)] border border-[var(--border)] p-4 flex items-center justify-center shadow-sm">
+            <div className="absolute -inset-4 bg-[var(--accent)]/5 rounded-full blur-2xl group-hover:bg-[var(--accent)]/10 transition-all duration-500" />
+            <div className="relative w-24 h-24 rounded-3xl bg-gradient-to-br from-[var(--foreground)]/[0.03] to-transparent border border-[var(--border)] p-5 flex items-center justify-center shadow-xl">
               <Image
                 src={logo}
                 alt="Logo"
-                fill
-                className="object-contain p-4"
+                width={60}
+                height={60}
+                className="object-contain"
               />
             </div>
           </motion.div>
 
           {/* Clean Typography */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-2 mb-10"
-          >
-            <h1 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-              Welcome Back
+          <div className="text-center space-y-3 mb-10">
+            <h1 className="text-4xl font-bold tracking-tight text-[var(--foreground)] leading-tight">
+              Welcome
             </h1>
-            <p className="text-[var(--muted)] text-sm font-medium px-8 leading-relaxed">
-              Login to access your high-fidelity dashboard.
+            <p className="text-[var(--muted)] text-[15px] font-medium leading-relaxed px-4">
+              Sign in to access your premium dashboard.
             </p>
-          </motion.div>
+          </div>
 
-          {/* Actions */}
-          <div className="w-full space-y-8">
-            {/* Status Messages - Clean & Simple */}
+          {/* Main Action Area */}
+          <div className="w-full space-y-6">
             <AnimatePresence mode="wait">
               {error && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-red-500/5 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-xl flex items-center gap-3"
+                  className="bg-red-500/5 border border-red-500/10 text-red-500 text-sm py-4 px-5 rounded-2xl flex items-center gap-3"
                 >
-                  <RiLockPasswordLine className="text-base flex-shrink-0" />
-                  <span className="text-left font-medium">{error}</span>
+                  <RiLockPasswordLine className="text-lg flex-shrink-0" />
+                  <span className="font-semibold">{error}</span>
                 </motion.div>
               )}
               {success && (
@@ -124,60 +122,72 @@ export default function AuthPage() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-green-500/5 border border-green-500/20 text-green-400 text-xs px-4 py-3 rounded-xl flex items-center gap-3"
+                  className="bg-green-500/5 border border-green-500/10 text-green-500 text-sm py-4 px-5 rounded-2xl flex items-center gap-3"
                 >
-                  <RiShieldKeyholeFill className="text-base flex-shrink-0" />
-                  <span className="text-left font-medium">{success}</span>
+                  <RiShieldKeyholeFill className="text-lg flex-shrink-0" />
+                  <span className="font-semibold">{success}</span>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Simple Premium Google Button */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="group/btn"
-            >
-              <div className="relative flex justify-center w-full transition-all duration-300 rounded-full border border-[var(--border)] hover:border-[var(--accent)]/50 bg-black overflow-hidden shadow-sm hover:shadow-md">
-                <GoogleLogin
-                  onSuccess={(res) =>
-                    res.credential && handleGoogleLogin(res.credential)
-                  }
-                  onError={() => setError("Authorization Failed")}
-                  theme="filled_black"
-                  size="large"
-                  shape="pill"
-                  width="360px"
-                  text="continue_with"
-                />
-              </div>
-            </motion.div>
-
-            {/* Minimal Loading */}
-            {loading && (
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-[1.5px] border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-                <span className="text-[10px] text-[var(--muted)] font-bold tracking-widest uppercase">
-                  Verifying
-                </span>
-              </div>
-            )}
-
-            <div className="relative py-2">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[var(--border)] opacity-30"></div>
-              </div>
-              <div className="relative flex justify-center">
-                <span className="bg-[var(--card)]/80 px-4 text-[10px] tracking-widest font-bold uppercase text-[var(--muted)]/60">
-                  Secure Portal
-                </span>
+            {/* Premium Google Button */}
+            <div className="relative group">
+              {/* Shimmer Effect */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent rounded-[1.25rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-sm" />
+              
+              <div className="relative">
+                <div className="w-full h-[56px] relative rounded-[1.25rem] bg-[var(--foreground)] text-[var(--background)] flex items-center justify-center font-bold text-base transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-black/5 overflow-hidden">
+                   <div className="absolute left-5 text-2xl">
+                     <FcGoogle />
+                   </div>
+                   
+                   {/* Capture clicks with the real GoogleLogin component */}
+                   <div className="absolute inset-0 z-20 opacity-0 cursor-pointer scale-[2]">
+                     <GoogleLogin
+                       onSuccess={(res: any) => res.credential && handleGoogleLogin(res.credential)}
+                       onError={() => setError("Authorization Failed")}
+                       useOneTap
+                       width="400px"
+                     />
+                   </div>
+                   
+                   <span className="ml-[10px]">Continue with Google</span>
+                </div>
               </div>
             </div>
 
-            <p className="text-[10px] text-[var(--muted)]/50 leading-relaxed font-medium">
-              Protected by military-grade encryption. Learn more about our <span className="hover:text-[var(--foreground)] transition-colors cursor-pointer underline underline-offset-4">Security</span>.
-            </p>
+            {/* Status Info */}
+            {loading && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-center justify-center gap-3 py-2"
+              >
+                <div className="w-4 h-4 border-2 border-[var(--accent)]/20 border-t-[var(--accent)] rounded-full animate-spin" />
+                <span className="text-[10px] text-[var(--muted)] font-extrabold tracking-[0.3em] uppercase">
+                  Verifying
+                </span>
+              </motion.div>
+            )}
+
+            {/* Separator */}
+            <div className="flex items-center gap-4 py-4 opacity-10">
+              <div className="h-[1px] flex-1 bg-[var(--foreground)]" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--foreground)]" />
+              <div className="h-[1px] flex-1 bg-[var(--foreground)]" />
+            </div>
+
+            {/* Security Notice */}
+            <div className="text-center space-y-4">
+              <p className="text-[11px] text-[var(--muted)] leading-relaxed max-w-[240px] mx-auto font-medium">
+                Protected by end-to-end encryption. Agree to our <span className="text-[var(--foreground)] hover:text-[var(--accent)] transition-colors cursor-pointer underline underline-offset-4">Terms</span>.
+              </p>
+              
+              <div className="flex items-center justify-center gap-2 text-[var(--accent)]/40">
+                <RiShieldKeyholeFill className="text-sm" />
+                <span className="text-[9px] font-bold tracking-[0.3em] uppercase">Secure Access</span>
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>
