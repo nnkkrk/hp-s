@@ -421,10 +421,13 @@ export default function OrdersTab() {
                         <p className="text-[9px] font-mono text-[var(--muted)] mt-1 uppercase">{o.orderId}</p>
                       </div>
 
-                      <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center gap-2">
-                          <Calendar size={12} className="text-[var(--muted)]/40" />
-                          <span className="text-[10px] font-bold text-[var(--muted)]/60">{new Date(o.createdAt).toLocaleDateString()}</span>
+                      <div className="flex items-center justify-between gap-4 pt-0.5" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-tighter text-[var(--muted)]/40">
+                          <span>{new Date(o.createdAt).toLocaleDateString()}</span>
+                          <span className="w-[1px] h-2 bg-[var(--border)]" />
+                          <span className="text-[var(--accent)]/60">
+                             {new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                          </span>
                         </div>
 
                         <StatusDropdown

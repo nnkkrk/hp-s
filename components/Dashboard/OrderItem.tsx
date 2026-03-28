@@ -96,11 +96,15 @@ export default function OrderItem({ order }: { order: OrderType }) {
             </div>
 
             <div className="flex items-center justify-between sm:justify-end gap-5 border-t sm:border-t-0 border-[var(--border)] pt-3 sm:pt-0">
-              <div className="text-right">
-                <div className="flex items-center justify-end gap-1 text-[9px] font-medium text-[var(--muted)] mb-0.5 uppercase">
-                  <FiCalendar /> {new Date(order.createdAt).toLocaleDateString()}
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <div className="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-tighter text-[var(--muted)]/40">
+                  <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                  <span className="w-[1px] h-2 bg-[var(--border)]" />
+                  <span className="text-[var(--accent)]/60">
+                    {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                  </span>
                 </div>
-                <div className="text-base font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
+                <div className="text-base font-black text-[var(--foreground)] tracking-tight">₹{order.price.toFixed(2)}</div>
               </div>
 
               <div className="flex items-center gap-2">

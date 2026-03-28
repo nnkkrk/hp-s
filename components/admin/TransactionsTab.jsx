@@ -258,19 +258,21 @@ export default function TransactionsTab() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px]">
+                    <div className="flex items-center justify-between text-[11px] mt-4 pt-4 border-t border-[var(--border)]/30">
                       <div className="flex items-center gap-2 min-w-0">
                         <div className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center shrink-0">
                           <Gamepad2 size={14} className="text-[var(--accent)]" />
                         </div>
                         <div className="truncate">
-                          <p className="font-bold text-[var(--foreground)] uppercase">{t.gameSlug}</p>
-                          <p className="text-[var(--muted)]/60 truncate">{t.email || "No Email"}</p>
+                          <p className="font-bold text-[var(--foreground)] uppercase text-[10px] tracking-tight">{t.gameSlug}</p>
+                          <p className="text-[9px] text-[var(--muted)]/60 truncate">{t.email || "No Email"}</p>
                         </div>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="font-medium text-[var(--muted)]/40">{new Date(t.createdAt).toLocaleDateString()}</p>
-                        <ChevronRight size={14} className="ml-auto text-[var(--muted)]/20 mt-1" />
+                        <div className="flex flex-col items-end gap-0.5">
+                           <p className="font-bold text-[8px] text-[var(--muted)]/40 uppercase tracking-widest">{new Date(t.createdAt).toLocaleDateString()}</p>
+                           <p className="font-bold text-[8px] text-[var(--accent)]/50 tracking-tighter">{new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
+                        </div>
                       </div>
                     </div>
                   </motion.div>

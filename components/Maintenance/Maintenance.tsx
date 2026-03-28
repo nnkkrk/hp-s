@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiAlertTriangle, FiCpu, FiLogOut } from "react-icons/fi";
+import { FiAlertTriangle, FiCpu, FiLogOut, FiLock } from "react-icons/fi";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 
 export default function Maintenance() {
     const pathname = usePathname();
@@ -162,15 +164,27 @@ export default function Maintenance() {
                                 {/* Action Area */}
                                 <div className="w-full">
                                     {!isLoggingOut ? (
-                                        <button
-                                            onClick={handleLoggingOff}
-                                            className="group relative w-full overflow-hidden rounded-2xl bg-white text-black py-4 font-bold text-sm transition-all hover:bg-slate-200"
-                                        >
-                                            <div className="relative z-10 flex items-center justify-center gap-2">
-                                                <span>Return Home</span>
-                                                <FiLogOut className="group-hover:translate-x-1 transition-transform" />
+                                        <>
+                                            <button
+                                                onClick={handleLoggingOff}
+                                                className="group relative w-full overflow-hidden rounded-2xl bg-white text-black py-4 font-bold text-sm transition-all hover:bg-slate-200"
+                                            >
+                                                <div className="relative z-10 flex items-center justify-center gap-2">
+                                                    <span>Return Home</span>
+                                                    <FiLogOut className="group-hover:translate-x-1 transition-transform" />
+                                                </div>
+                                            </button>
+
+                                            <div className="flex justify-center mt-4">
+                                                <Link
+                                                    href="/login"
+                                                    className="group inline-flex items-center gap-2 text-slate-500 hover:text-sky-400 transition-all duration-300 text-[10px] font-bold uppercase tracking-[0.3em] py-2 border-b border-transparent hover:border-sky-500/30"
+                                                >
+                                                    <FiLock className="text-xs group-hover:scale-110 transition-transform" />
+                                                    <span>Restricted Access</span>
+                                                </Link>
                                             </div>
-                                        </button>
+                                        </>
                                     ) : (
                                         <div className="space-y-4 py-2">
                                             <div className="flex items-center justify-center gap-2 text-white/60 text-xs font-semibold uppercase tracking-widest">
